@@ -5,12 +5,31 @@
 /// Napišite funkcijo `fib`, ki sprejme začetna člena fibbonacijevega zaporedja, število `n` in vrne `n`-ti člen zaporedja
 
 fn fib(a0: u32, a1: u32, n: u32) -> u32 {
-    panic!("Not implemented");
+    if n <= 0 {
+        return a0;
+    } else if n == 1 {
+        return a1;
+    } else {
+        return fib(a1, a0 + a1, n - 1); 
+    }
 }
+
 
 /// ------------------------------------------------------------------------------------------------
 
 /// Napišite funkcijo `je_prestopno`, ki za podano leto preveri, ali je prestopno
+
+fn je_prestopno (n: u32) -> bool {
+    if n % 400 == 0 {
+        return true;
+    } else if n % 100 == 0 {
+        return false;
+    } else if n % 4 == 0 {
+        return true;
+    } else {
+        return false
+    }
+}
 
 /// ------------------------------------------------------------------------------------------------
 
@@ -18,6 +37,39 @@ fn fib(a0: u32, a1: u32, n: u32) -> u32 {
 
 // Dan, mesec, leto
 type Date = (u32, u32, u32);
+
+
+fn je_veljaven_datum(dan: u32, mesec: u32, leto: u32) -> bool {
+    if leto > 2024 {
+        return false;
+    } else if mesec == 2 {
+        if je_prestopno(leto) {
+            if dan < 30 {
+                return true;                
+            } else {
+                return false;
+            }
+        } else {
+            if dan < 29 {
+                return true;                
+            } else {
+                return false;
+            }
+        }
+    } else if mesec == 1 || mesec == 3 || mesec == 5 || mesec == 8 || mesec == 7 || mesec == 10 || mesec == 12 {
+        if dan < 32 {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        if dan < 31 {
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
 
 /// ------------------------------------------------------------------------------------------------
 
@@ -111,3 +163,21 @@ mod tests {
         assert_eq!(fib(0, 1, 10), 55);
     }
 }
+    #[test]
+    fn test_je_prestopno() {
+        assert_eq!(je_prestopno(2000), true);
+        assert_eq!(je_prestopno(2004), true);
+        assert_eq!(je_prestopno(1808), true);
+        assert_eq!(je_prestopno(1936), true);
+        assert_eq!(je_prestopno(1000), false);
+        assert_eq!(je_prestopno(13), false);
+        assert_eq!(je_prestopno(1111), false);
+    }
+
+    #[test]
+    fn test_je_veljaven_datum() {
+        assert_eq!(je_veljaven_datum(4, 4, 2000), true);
+        assert_eq!(je_veljaven_datum(1, 1, 2200), false);
+        assert_eq!(je_veljaven_datum(30, 2, 2000), false);
+        assert_eq!(je_veljaven_datum(35, 7, 1), false);
+    }
